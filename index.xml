@@ -6,18 +6,31 @@
     <description>Recent content on myblog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Sep 2019 11:25:15 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 17 Sep 2019 12:29:31 +0800</lastBuildDate>
     
 	<atom:link href="https://fengfasong80.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>my first blog</title>
+      <title>jfinal框架学习</title>
+      <link>https://fengfasong80.github.io/post/jfinal01/</link>
+      <pubDate>Tue, 17 Sep 2019 12:29:31 +0800</pubDate>
+      
+      <guid>https://fengfasong80.github.io/post/jfinal01/</guid>
+      <description>非maven方式开发 关于项目的创建请参考 jifinal官网
+项目创建注意的地方 1.关于下面代码的修改
+&amp;lt;filter&amp;gt; &amp;lt;filter-name&amp;gt;jfinal&amp;lt;/filter-name&amp;gt; &amp;lt;filter-class&amp;gt;com.jfinal.core.JFinalFilter&amp;lt;/filter-class&amp;gt; &amp;lt;init-param&amp;gt; &amp;lt;param-name&amp;gt;configClass&amp;lt;/param-name&amp;gt; &amp;lt;param-value&amp;gt;demo.DemoConfig&amp;lt;/param-value&amp;gt; &amp;lt;/init-param&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;filter-mapping&amp;gt; &amp;lt;filter-name&amp;gt;jfinal&amp;lt;/filter-name&amp;gt; &amp;lt;url-pattern&amp;gt;/*&amp;lt;/url-pattern&amp;gt; &amp;lt;/filter-mapping&amp;gt;
+在param-value中，该路径为你自己的DemoConfig路径，前面的demo为包名，很多同学在该地方没注意，直接复制，就会出现错误。
+2.访问路径的问题 如何你是直接按照文档的路径访问，一般都会出现问题，在项目部署到tomcat中以后，本地访问应该为localhost:8080/项目名/hello,浏览器显示结果如下图 自定义访问方法 在此我将自定义一个test的方法，并在浏览器输出该内容 public void test() { renderText(&amp;quot;welcome to my blog!&amp;quot;); } 显示结果如下图 总结 该篇主要是为了学习jfinal在非maven下的项目创建，以及成功运行测试代码，因为是第一篇博客，很多地方不够完善，在接下来的博客，我将继续学习jfinal框架与mysql数据库之间实现增删改查。</description>
+    </item>
+    
+    <item>
+      <title>test blog</title>
       <link>https://fengfasong80.github.io/post/blog/</link>
       <pubDate>Tue, 17 Sep 2019 11:25:15 +0800</pubDate>
       
       <guid>https://fengfasong80.github.io/post/blog/</guid>
-      <description>#this is a test blog</description>
+      <description> this is a test blog </description>
     </item>
     
   </channel>
