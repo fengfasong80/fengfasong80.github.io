@@ -6,10 +6,35 @@
     <description>Recent content in Posts on myblog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Sep 2019 12:29:31 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 20 Sep 2019 19:18:26 +0800</lastBuildDate>
     
 	<atom:link href="https://fengfasong80.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Jdk环境变量的配置问题</title>
+      <link>https://fengfasong80.github.io/post/jdk/</link>
+      <pubDate>Fri, 20 Sep 2019 19:18:26 +0800</pubDate>
+      
+      <guid>https://fengfasong80.github.io/post/jdk/</guid>
+      <description>最近几天上课的时候，同学问了我为什么他的jdk输入javac没有反应，但是使用工具（eclipse），能够编译代码，所以决定写一下这个问题，也是博主我刚开始学习java遇到过的一个问题。
+配置正确的情况 直接上截图 输入java -version的情况 输入javac的情况 普遍的配置方式 参考网址jdk配置大众方式
+出现的问题 输入java -version没什么问题，但是输入javac显示不是内部命令。
+解决问题 首先，我们来看一下javac在什么地方，如果安装的路径是默认的话，路径在,C:\Program Files\Java\jdk1.8.0_161\bin,那么出现这个问题原因我们应该也能够清楚了，就是系统找不到javac所在的位置。 所以解决问题的思路就是，要让系统找到我们的javac，所以我们就换一种配置方式，直接在系统的path变量中配置javac所在的目录，C:\Program Files\Java\jdk1.8.0_161\bin，到此问题就解决了。
+总结 关于这个问题，其实博主我看过很多同学的配置方式，大家的电脑系统也有各种的，所以出现这个问题的原因和使用的操作系统应该有很大的关系，初步判断在windows7下按照大众的配置是没问题的，但是在windows8和windows10下会出现该问题，但也遇见过列外。 但是只要大家知道了问题的根源，解决是没有问题的。</description>
+    </item>
+    
+    <item>
+      <title>jfinal关于sql模块</title>
+      <link>https://fengfasong80.github.io/post/jdatabase/</link>
+      <pubDate>Wed, 18 Sep 2019 15:43:43 +0800</pubDate>
+      
+      <guid>https://fengfasong80.github.io/post/jdatabase/</guid>
+      <description>参考 关于该模块可以参考jfinal中文文档
+plugin配置 示例代码如下
+public class DemoConfig extends JFinalConfig { public void configPlugin(Plugins me) { DruidPlugin dp = new DruidPlugin(&amp;quot;jdbc:mysql://localhost/db_name&amp;quot;, &amp;quot;userName&amp;quot;, &amp;quot;password&amp;quot;); me.add(dp); ActiveRecordPlugin arp = new ActiveRecordPlugin(dp); me.add(arp); arp.addMapping(&amp;quot;user&amp;quot;, User.class); arp.addMapping(&amp;quot;article&amp;quot;, &amp;quot;article_id&amp;quot;, Article.class); } }  改代码的配置，url应该改为自己的数据库，列如有数据库database,则url为jdbc:mysql://localhost：3306/database. 用户名与密码也要改为自己的，关于代码
+arp.addMapping(&amp;quot;article&amp;quot;, &amp;quot;article_id&amp;quot;, Article.class);``` 如果你的表的主键id为xx_id,则使用arp.addMapping(&amp;quot;article&amp;quot;, &amp;quot;article_id&amp;quot;, Article.class)，article为表名， 如果你的主键字段就为id，则使用arp.addMapping(&amp;quot;user&amp;quot;, User.class)，**重点，这两句代码不要一起写入，** # Model 官网解释： Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分， 根据官网以及自己的调试，model中为我们提供了放便的增删改查，也就是我们不必去自己实现，只需要调用model中的方法即可完成数据库的增删改查。 官网model示例代码 ```java public class User extends Model&amp;lt;User&amp;gt; { public static final User dao = new User().dao(); }  关于该处，不建议这样写，一般在service层中new 出dao，然后就是该处博主我也有很多地方没有清楚，正在研究中，有兴趣的同学可以自己去官网查看，询问。</description>
+    </item>
     
     <item>
       <title>jfinal框架学习</title>

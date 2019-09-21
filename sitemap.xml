@@ -3,20 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://fengfasong80.github.io/post/jdk/</loc>
+    <lastmod>2019-09-20T19:18:26+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://fengfasong80.github.io/post/</loc>
-    <lastmod>2019-09-17T12:29:31+08:00</lastmod>
+    <lastmod>2019-09-20T19:18:26+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengfasong80.github.io/</loc>
+    <lastmod>2019-09-20T19:18:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://fengfasong80.github.io/post/jdatabase/</loc>
+    <lastmod>2019-09-18T15:43:43+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://fengfasong80.github.io/post/jfinal01/</loc>
     <lastmod>2019-09-17T12:29:31+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://fengfasong80.github.io/</loc>
-    <lastmod>2019-09-17T12:29:31+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>jfinal关于sql模块 // myblog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://fengfasong80.github.io/css/main.min.f90f5edd436ec7b74ad05479a05705770306911f721193e7845948fb07fe1335.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="jfinal关于sql模块"/>
+<meta name="twitter:description" content="参考 关于该模块可以参考jfinal中文文档
+plugin配置 示例代码如下
+public class DemoConfig extends JFinalConfig { public void configPlugin(Plugins me) { DruidPlugin dp = new DruidPlugin(&quot;jdbc:mysql://localhost/db_name&quot;, &quot;userName&quot;, &quot;password&quot;); me.add(dp); ActiveRecordPlugin arp = new ActiveRecordPlugin(dp); me.add(arp); arp.addMapping(&quot;user&quot;, User.class); arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class); } }  改代码的配置，url应该改为自己的数据库，列如有数据库database,则url为jdbc:mysql://localhost：3306/database. 用户名与密码也要改为自己的，关于代码
+arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class);``` 如果你的表的主键id为xx_id,则使用arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class)，article为表名， 如果你的主键字段就为id，则使用arp.addMapping(&quot;user&quot;, User.class)，**重点，这两句代码不要一起写入，** # Model 官网解释： Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分， 根据官网以及自己的调试，model中为我们提供了放便的增删改查，也就是我们不必去自己实现，只需要调用model中的方法即可完成数据库的增删改查。 官网model示例代码 ```java public class User extends Model&lt;User&gt; { public static final User dao = new User().dao(); }  关于该处，不建议这样写，一般在service层中new 出dao，然后就是该处博主我也有很多地方没有清楚，正在研究中，有兴趣的同学可以自己去官网查看，询问。"/>
+
+    <meta property="og:title" content="jfinal关于sql模块" />
+<meta property="og:description" content="参考 关于该模块可以参考jfinal中文文档
+plugin配置 示例代码如下
+public class DemoConfig extends JFinalConfig { public void configPlugin(Plugins me) { DruidPlugin dp = new DruidPlugin(&quot;jdbc:mysql://localhost/db_name&quot;, &quot;userName&quot;, &quot;password&quot;); me.add(dp); ActiveRecordPlugin arp = new ActiveRecordPlugin(dp); me.add(arp); arp.addMapping(&quot;user&quot;, User.class); arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class); } }  改代码的配置，url应该改为自己的数据库，列如有数据库database,则url为jdbc:mysql://localhost：3306/database. 用户名与密码也要改为自己的，关于代码
+arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class);``` 如果你的表的主键id为xx_id,则使用arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class)，article为表名， 如果你的主键字段就为id，则使用arp.addMapping(&quot;user&quot;, User.class)，**重点，这两句代码不要一起写入，** # Model 官网解释： Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分， 根据官网以及自己的调试，model中为我们提供了放便的增删改查，也就是我们不必去自己实现，只需要调用model中的方法即可完成数据库的增删改查。 官网model示例代码 ```java public class User extends Model&lt;User&gt; { public static final User dao = new User().dao(); }  关于该处，不建议这样写，一般在service层中new 出dao，然后就是该处博主我也有很多地方没有清楚，正在研究中，有兴趣的同学可以自己去官网查看，询问。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fengfasong80.github.io/post/jdatabase/" />
+<meta property="article:published_time" content="2019-09-18T15:43:43&#43;08:00"/>
+<meta property="article:modified_time" content="2019-09-18T15:43:43&#43;08:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://fengfasong80.github.io/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <h1>myblog</h1>
+      <p>关于本博客，该博客的更新时间不确定，主要是在学习过程中的一些复习以及自己的了解。</p>
+      <div class="app-header-social">
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">jfinal关于sql模块</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Sep 18, 2019
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h1 id="参考">参考</h1>
+
+<p>关于该模块可以参考<a href="https://www.jfinal.com/doc/5-1">jfinal中文文档</a></p>
+
+<h1 id="plugin配置">plugin配置</h1>
+
+<p>示例代码如下</p>
+
+<pre><code class="language-java">public class DemoConfig extends JFinalConfig {
+  public void configPlugin(Plugins me) {
+  DruidPlugin dp = new DruidPlugin(&quot;jdbc:mysql://localhost/db_name&quot;, &quot;userName&quot;, &quot;password&quot;);
+    me.add(dp);
+    ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
+    me.add(arp);
+    arp.addMapping(&quot;user&quot;, User.class);
+    arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class);
+  }
+}
+</code></pre>
+
+<p>改代码的配置，url应该改为自己的数据库，列如有数据库database,则url为<strong>jdbc:mysql://localhost：3306/database.</strong>
+用户名与密码也要改为自己的，关于代码</p>
+
+<pre><code class="language-arp.addMapping(&quot;user&quot;,">    arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class);```
+如果你的表的主键id为xx_id,则使用arp.addMapping(&quot;article&quot;, &quot;article_id&quot;, Article.class)，article为表名，
+如果你的主键字段就为id，则使用arp.addMapping(&quot;user&quot;, User.class)，**重点，这两句代码不要一起写入，**
+
+# Model
+官网解释： Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分，
+根据官网以及自己的调试，model中为我们提供了放便的增删改查，也就是我们不必去自己实现，只需要调用model中的方法即可完成数据库的增删改查。
+官网model示例代码
+```java
+public class User extends Model&lt;User&gt; {
+    public static final User dao = new User().dao();
+}
+</code></pre>
+
+<p>关于该处，不建议这样写，一般在service层中new 出dao，然后就是该处博主我也有很多地方没有清楚，正在研究中，有兴趣的同学可以自己去官网查看，询问。</p>
+
+<h1 id="增删改查实现">增删改查实现</h1>
+
+<h2 id="表字段">表字段</h2>
+
+<p><img src="http://a3.qpic.cn/psb?/V14bSpWf3FzPz6/dKWdh1iAdq.Sbbq0TVGWfAQ4tg0gLLiQVWLMR5M0ZVI!/m/dDYBAAAAAAAAnull&amp;bo=CANXAgAAAAADB3w!&amp;rf=photolist&amp;t=5" alt="atavar" /></p>
+
+<h3 id="增">增</h3>
+
+<p>```java
+public void insert() {
+             String str = getPara(&ldquo;account&rdquo;);</p>
+
+<pre><code>             new User().set(&quot;account&quot;, str).set(&quot;password&quot;, 25).save();
+             renderText(str);
+     }
+     ```
+</code></pre>
+
+<p>该处不需要传入account参数，而密码我固定了，大家可以自己修改。</p>
+
+<h3 id="删">删</h3>
+
+<p><code>java
+public void delete() {
+             String str = getPara(&quot;id&quot;);
+             int id = Integer.parseInt(str);
+             User.dao.deleteById(id);
+             renderText(&quot;successful&quot;);
+         }
+</code>
+该处需要传入的参数为id，即传入需要删除用户的id</p>
+
+<h3 id="更新">更新</h3>
+
+<p><code>java
+public void update() {
+             String str = getPara(&quot;id&quot;);
+             int id = Integer.parseInt(str);
+             User.dao.findById(id).set(&quot;account&quot;, &quot;James&quot;).update();
+             renderText(&quot;successful&quot;);
+         }
+</code>
+该处需要传入的也是id，我使更新的account固定，需要动态输入的话，大家可以自己修改。</p>
+
+<h3 id="查">查</h3>
+
+<p>```java</p>
+
+<p>public void find() {
+             List<User> user = User.dao.find(&ldquo;select * from user&rdquo;);
+                 renderJson(user);</p>
+
+<pre><code>     }
+     ```
+</code></pre>
+
+<p>该处将查询到的所有用户以json的格式显示到浏览器，关于该处，博主最开始使用for循环去遍历user，出来的只有一个用户，显示到浏览器使用的renderText,出现这种情况，博主并没有弄清楚，不过有一个猜测，就是，renderText是一个阻塞的方法，不过属于猜测，还没去进行验证。</p>
+
+<h1 id="总结">总结</h1>
+
+<p>总的来说，使用起来很方便，但是对多表的操作会变得复杂，在刚开始学习，暂时还没发现其他比较方便的地方。有一点，user.dao()只查询方法。</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
