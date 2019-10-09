@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>关于spring与mybatis的学习 // myblog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://fengfasong80.github.io/css/main.min.f90f5edd436ec7b74ad05479a05705770306911f721193e7845948fb07fe1335.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="关于spring与mybatis的学习"/>
+<meta name="twitter:description" content="前言 因为最近在学spring与mybatis，所以更新也慢了一点，所以该篇博客也将进行spring与mybatis的学习。
+首先来了解一下spring 看一下百度的解释 ![]() 总结一下就是：解决企业开发中的复杂性。并且该框架开源，所以我们学习是不需要花费任何一点费用。
+再来看一下官网的解释 官网地址,可以看见spring的内容包括有spring cloud, spring boot, 还有一个spring mvc 接下来我要展示的是spring mvc与mybatis的联合使用，关于mybatis的话，在下面的过程中再讲解，因为博主我也在学习中，对他们的很多都不是很了解，但是，动手才是最重要的，所以，接下来我们就开始动手操作。 首先的话，在下面使用到的jar包都在maven仓库地址中获取，当然，你们也可以复制我下面的，但是因为网络问题，所以有些版本可能下载不了，可以到该网址换版本。
+来看一下项目结构 ![]() 该demo是我们老师给我们的，然后我自己进行了增加，前端使用了easyui的框架，大家可以不用去在意，主要看后端实现就好。该demo博主会放在我的github上面，感兴趣可以去克隆下来。 结构了解后，再来看一下运行的效果 ![]() 该demo主要是针对一张表的操作，博主我在后面有增加一张表，登陆的用户表不算在内，登陆在后面再进行讲解。
+接下里就对各个包进行解释，java文件存放的就是我们的java源码，resources存放的各种资源文件，包括各种xml的配置文件以及数据库的连接信息文件。 所以我们需要关注的是java下各个包存放的是什么， 我们首先关注的应该是entity这个包，根据单词意思应该就能猜出里面存放的内容，不错，就是各种实体类。 接下里关注的就是mapper，在里面定义的是各种接口，然后在对应的resources中我们需要创建对应的xml配置文件，关于mapper，现在只要理解为对创建bean对象的一个接口就好，在后面再进行深入的学习。
+接下来要关注的就是service了，在里面定义的是各种接口以及他们的实现。现在我们只需要知道它可以调用mapper接口就好。
+最后需要关注的就是controller了，在里面进行是一些事务的控制。
+开始正式的搭建该demo 第一步先看一下resources的结构，我们需要进行xml的配置。 第一个需要的文件config.properties 里面就是数据库的连接信息
+mysql.driverClassName=com.mysql.jdbc.Driver mysql.jdbcUrl=jdbc:mysql://localhost:3306/tutorial?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false mysql.username=root mysql.password=123  第二个我们来配置spring-mybatis.xml关于解释的话，已经写好注释了，这里的话就要感谢我的老师，感觉理解起来就是很棒。
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt; &lt;!-- 数据库连接池配置 --&gt; &lt;bean id=&quot;dataSource&quot; class=&quot;com.zaxxer.hikari.HikariDataSource&quot; destroy-method=&quot;close&quot;&gt; &lt;property name=&quot;driverClassName&quot; value=&quot;${mysql.driverClassName}&quot; /&gt; &lt;property name=&quot;jdbcUrl&quot; value=&quot;${mysql.jdbcUrl}&quot; /&gt; &lt;property name=&quot;username&quot; value=&quot;${mysql.username}&quot; /&gt; &lt;property name=&quot;password&quot; value=&quot;${mysql."/>
+
+    <meta property="og:title" content="关于spring与mybatis的学习" />
+<meta property="og:description" content="前言 因为最近在学spring与mybatis，所以更新也慢了一点，所以该篇博客也将进行spring与mybatis的学习。
+首先来了解一下spring 看一下百度的解释 ![]() 总结一下就是：解决企业开发中的复杂性。并且该框架开源，所以我们学习是不需要花费任何一点费用。
+再来看一下官网的解释 官网地址,可以看见spring的内容包括有spring cloud, spring boot, 还有一个spring mvc 接下来我要展示的是spring mvc与mybatis的联合使用，关于mybatis的话，在下面的过程中再讲解，因为博主我也在学习中，对他们的很多都不是很了解，但是，动手才是最重要的，所以，接下来我们就开始动手操作。 首先的话，在下面使用到的jar包都在maven仓库地址中获取，当然，你们也可以复制我下面的，但是因为网络问题，所以有些版本可能下载不了，可以到该网址换版本。
+来看一下项目结构 ![]() 该demo是我们老师给我们的，然后我自己进行了增加，前端使用了easyui的框架，大家可以不用去在意，主要看后端实现就好。该demo博主会放在我的github上面，感兴趣可以去克隆下来。 结构了解后，再来看一下运行的效果 ![]() 该demo主要是针对一张表的操作，博主我在后面有增加一张表，登陆的用户表不算在内，登陆在后面再进行讲解。
+接下里就对各个包进行解释，java文件存放的就是我们的java源码，resources存放的各种资源文件，包括各种xml的配置文件以及数据库的连接信息文件。 所以我们需要关注的是java下各个包存放的是什么， 我们首先关注的应该是entity这个包，根据单词意思应该就能猜出里面存放的内容，不错，就是各种实体类。 接下里关注的就是mapper，在里面定义的是各种接口，然后在对应的resources中我们需要创建对应的xml配置文件，关于mapper，现在只要理解为对创建bean对象的一个接口就好，在后面再进行深入的学习。
+接下来要关注的就是service了，在里面定义的是各种接口以及他们的实现。现在我们只需要知道它可以调用mapper接口就好。
+最后需要关注的就是controller了，在里面进行是一些事务的控制。
+开始正式的搭建该demo 第一步先看一下resources的结构，我们需要进行xml的配置。 第一个需要的文件config.properties 里面就是数据库的连接信息
+mysql.driverClassName=com.mysql.jdbc.Driver mysql.jdbcUrl=jdbc:mysql://localhost:3306/tutorial?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false mysql.username=root mysql.password=123  第二个我们来配置spring-mybatis.xml关于解释的话，已经写好注释了，这里的话就要感谢我的老师，感觉理解起来就是很棒。
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt; &lt;!-- 数据库连接池配置 --&gt; &lt;bean id=&quot;dataSource&quot; class=&quot;com.zaxxer.hikari.HikariDataSource&quot; destroy-method=&quot;close&quot;&gt; &lt;property name=&quot;driverClassName&quot; value=&quot;${mysql.driverClassName}&quot; /&gt; &lt;property name=&quot;jdbcUrl&quot; value=&quot;${mysql.jdbcUrl}&quot; /&gt; &lt;property name=&quot;username&quot; value=&quot;${mysql.username}&quot; /&gt; &lt;property name=&quot;password&quot; value=&quot;${mysql." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fengfasong80.github.io/post/spring/" />
+<meta property="article:published_time" content="2019-10-09T15:16:45&#43;08:00"/>
+<meta property="article:modified_time" content="2019-10-09T15:16:45&#43;08:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://fengfasong80.github.io/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <h1>myblog</h1>
+      <p>关于本博客，该博客的更新时间不确定，主要是在学习过程中的一些复习以及自己的了解。</p>
+      <div class="app-header-social">
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">关于spring与mybatis的学习</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Oct 9, 2019
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          2 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h1 id="前言">前言</h1>
+
+<p>因为最近在学spring与mybatis，所以更新也慢了一点，所以该篇博客也将进行spring与mybatis的学习。</p>
+
+<h2 id="首先来了解一下spring">首先来了解一下spring</h2>
+
+<p>看一下百度的解释
+  ![]()
+  总结一下就是：解决企业开发中的复杂性。并且该框架开源，所以我们学习是不需要花费任何一点费用。</p>
+
+<p>再来看一下官网的解释
+  <a href="https://spring.io/">官网地址</a>,可以看见spring的内容包括有spring cloud, spring boot, 还有一个spring mvc
+  接下来我要展示的是spring mvc与mybatis的联合使用，关于mybatis的话，在下面的过程中再讲解，因为博主我也在学习中，对他们的很多都不是很了解，但是，动手才是最重要的，所以，接下来我们就开始动手操作。
+  首先的话，在下面使用到的jar包都在<a href="https://mvnrepository.com/">maven仓库地址</a>中获取，当然，你们也可以复制我下面的，但是因为网络问题，所以有些版本可能下载不了，可以到该网址换版本。</p>
+
+<h1 id="来看一下项目结构">来看一下项目结构</h1>
+
+<p>![]()
+该demo是我们老师给我们的，然后我自己进行了增加，前端使用了easyui的框架，大家可以不用去在意，主要看后端实现就好。该demo博主会放在我的github上面，感兴趣可以去克隆下来。
+结构了解后，再来看一下运行的效果
+![]()
+该demo主要是针对一张表的操作，博主我在后面有增加一张表，登陆的用户表不算在内，登陆在后面再进行讲解。</p>
+
+<p>接下里就对各个包进行解释，java文件存放的就是我们的java源码，resources存放的各种资源文件，包括各种xml的配置文件以及数据库的连接信息文件。
+所以我们需要关注的是java下各个包存放的是什么，
+我们首先关注的应该是entity这个包，根据单词意思应该就能猜出里面存放的内容，不错，就是各种实体类。
+接下里关注的就是mapper，在里面定义的是各种接口，然后在对应的resources中我们需要创建对应的xml配置文件，关于mapper，现在只要理解为对创建bean对象的一个接口就好，在后面再进行深入的学习。</p>
+
+<p>接下来要关注的就是service了，在里面定义的是各种接口以及他们的实现。现在我们只需要知道它可以调用mapper接口就好。</p>
+
+<p>最后需要关注的就是controller了，在里面进行是一些事务的控制。</p>
+
+<h1 id="开始正式的搭建该demo">开始正式的搭建该demo</h1>
+
+<p>第一步先看一下resources的结构，我们需要进行xml的配置。
+第一个需要的文件<strong>config.properties</strong>
+里面就是数据库的连接信息</p>
+
+<pre><code>mysql.driverClassName=com.mysql.jdbc.Driver
+mysql.jdbcUrl=jdbc:mysql://localhost:3306/tutorial?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false
+mysql.username=root
+mysql.password=123
+</code></pre>
+
+<p>第二个我们来配置<strong>spring-mybatis.xml</strong>关于解释的话，已经写好注释了，这里的话就要感谢我的老师，感觉理解起来就是很棒。</p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+	&lt;!-- 数据库连接池配置 --&gt;
+	&lt;bean id=&quot;dataSource&quot; class=&quot;com.zaxxer.hikari.HikariDataSource&quot; destroy-method=&quot;close&quot;&gt;
+		&lt;property name=&quot;driverClassName&quot; value=&quot;${mysql.driverClassName}&quot; /&gt;
+		&lt;property name=&quot;jdbcUrl&quot; value=&quot;${mysql.jdbcUrl}&quot; /&gt;
+		&lt;property name=&quot;username&quot; value=&quot;${mysql.username}&quot; /&gt;
+		&lt;property name=&quot;password&quot; value=&quot;${mysql.password}&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id=&quot;sqlSessionFactory&quot;
+		class=&quot;com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean&quot;&gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;globalConfig&quot; ref=&quot;globalConfig&quot; /&gt;
+		&lt;property name=&quot;mapperLocations&quot;&gt;
+			&lt;array&gt;
+				&lt;!-- 扫描mybatis的xml文件， 相当于针对我们的mapper接口实现类 --&gt;
+             	&lt;value&gt;classpath:mapper/*/*.xml&lt;/value&gt;
+             &lt;/array&gt;
+		&lt;/property&gt;
+		&lt;property name=&quot;plugins&quot;&gt;
+			&lt;array&gt;
+				&lt;!-- 性能分析拦截器，用于输出每条 SQL 语句及其执行时间 --&gt;
+				&lt;bean class=&quot;com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor&quot;&gt;&lt;/bean&gt;
+				&lt;!-- 分页插件，这样写分页就不用像纯mybatis那么麻烦了 --&gt;
+				&lt;bean class=&quot;com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor&quot;&gt;&lt;/bean&gt;
+			&lt;/array&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id=&quot;globalConfig&quot; class=&quot;com.baomidou.mybatisplus.core.config.GlobalConfig&quot;&gt;
+		&lt;property name=&quot;dbConfig&quot; ref=&quot;dbConfig&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- id类型为uuid --&gt;
+	&lt;bean id=&quot;dbConfig&quot; class=&quot;com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig&quot;&gt;
+		&lt;property name=&quot;idType&quot; value=&quot;UUID&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- 使我们的mapper接口能变成spring bean --&gt;
+	&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
+		&lt;property name=&quot;basePackage&quot; value=&quot;com.fc.springmvc.modules.*.mapper&quot; /&gt;
+	&lt;/bean&gt;
+
+&lt;/beans&gt;
+</code></pre>
+
+<p>第三个我们来配置<strong>spring-mvc.xml</strong></p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+	&lt;!-- 数据库连接池配置 --&gt;
+	&lt;bean id=&quot;dataSource&quot; class=&quot;com.zaxxer.hikari.HikariDataSource&quot; destroy-method=&quot;close&quot;&gt;
+		&lt;property name=&quot;driverClassName&quot; value=&quot;${mysql.driverClassName}&quot; /&gt;
+		&lt;property name=&quot;jdbcUrl&quot; value=&quot;${mysql.jdbcUrl}&quot; /&gt;
+		&lt;property name=&quot;username&quot; value=&quot;${mysql.username}&quot; /&gt;
+		&lt;property name=&quot;password&quot; value=&quot;${mysql.password}&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id=&quot;sqlSessionFactory&quot;
+		class=&quot;com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean&quot;&gt;
+		&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+		&lt;property name=&quot;globalConfig&quot; ref=&quot;globalConfig&quot; /&gt;
+		&lt;property name=&quot;mapperLocations&quot;&gt;
+			&lt;array&gt;
+				&lt;!-- 扫描mybatis的xml文件， 相当于针对我们的mapper接口实现类 --&gt;
+             	&lt;value&gt;classpath:mapper/*/*.xml&lt;/value&gt;
+             &lt;/array&gt;
+		&lt;/property&gt;
+		&lt;property name=&quot;plugins&quot;&gt;
+			&lt;array&gt;
+				&lt;!-- 性能分析拦截器，用于输出每条 SQL 语句及其执行时间 --&gt;
+				&lt;bean class=&quot;com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor&quot;&gt;&lt;/bean&gt;
+				&lt;!-- 分页插件，这样写分页就不用像纯mybatis那么麻烦了 --&gt;
+				&lt;bean class=&quot;com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor&quot;&gt;&lt;/bean&gt;
+			&lt;/array&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id=&quot;globalConfig&quot; class=&quot;com.baomidou.mybatisplus.core.config.GlobalConfig&quot;&gt;
+		&lt;property name=&quot;dbConfig&quot; ref=&quot;dbConfig&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- id类型为uuid --&gt;
+	&lt;bean id=&quot;dbConfig&quot; class=&quot;com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig&quot;&gt;
+		&lt;property name=&quot;idType&quot; value=&quot;UUID&quot; /&gt;
+	&lt;/bean&gt;
+
+	&lt;!-- 使我们的mapper接口能变成spring bean --&gt;
+	&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
+		&lt;property name=&quot;basePackage&quot; value=&quot;com.fc.springmvc.modules.*.mapper&quot; /&gt;
+	&lt;/bean&gt;
+
+&lt;/beans&gt;
+
+</code></pre>
+
+<p>第四个我们来配置<strong>spring.xml</strong></p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:util=&quot;http://www.springframework.org/schema/util&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd&quot;&gt;
+
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;context:property-placeholder location=&quot;classpath:config.properties&quot;/&gt;
+    &lt;context:component-scan base-package=&quot;com.fc.springmvc&quot;/&gt;
+    &lt;import resource=&quot;classpath*:/spring/spring-mybatis.xml&quot; /&gt;
+    
+&lt;/beans&gt;
+</code></pre>
+
+<p>最后来配置一下<strong>web.xml</strong></p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app version=&quot;3.0&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+	&lt;display-name&gt;Archetype Created Web Application&lt;/display-name&gt;
+	&lt;!-- 加载Spring配置文件 --&gt;
+	&lt;context-param&gt;
+		&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+		&lt;param-value&gt;classpath:spring/spring.xml&lt;/param-value&gt;
+	&lt;/context-param&gt;
+	&lt;!-- 字符集 过滤器(处理中文乱码) --&gt;
+	&lt;filter&gt;
+		&lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+		&lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+		&lt;init-param&gt;
+			&lt;param-name&gt;encoding&lt;/param-name&gt;
+			&lt;param-value&gt;UTF-8&lt;/param-value&gt;
+		&lt;/init-param&gt;
+	&lt;/filter&gt;
+	&lt;filter-mapping&gt;
+		&lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+		&lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+	&lt;/filter-mapping&gt;
+	&lt;!-- Spring监听器 --&gt;
+	&lt;listener&gt;
+		&lt;description&gt;Spring监听器&lt;/description&gt;
+		&lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+	&lt;/listener&gt;
+	&lt;!-- 防止Spring内存溢出监听器 --&gt;
+	&lt;listener&gt;
+		&lt;listener-class&gt;org.springframework.web.util.IntrospectorCleanupListener&lt;/listener-class&gt;
+	&lt;/listener&gt;
+	&lt;!-- Spring MVC --&gt;
+	&lt;servlet&gt;
+		&lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt;
+		&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+		&lt;init-param&gt;
+			&lt;description&gt;SpringMVC&lt;/description&gt;
+			&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+			&lt;param-value&gt;classpath:spring/spring-mvc.xml&lt;/param-value&gt;
+		&lt;/init-param&gt;
+		&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+	&lt;/servlet&gt;
+	&lt;servlet-mapping&gt;
+		&lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt;
+		&lt;url-pattern&gt;/&lt;/url-pattern&gt;
+	&lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+
+</code></pre>
+
+<h1 id="总结">总结</h1>
+
+<p>到此的话我们的框架已经搭好，后面就是开始java代码的编写，我会在下一篇博客进行讲解，大家也可以好好看一下xml文件内的注释，博主我也在学习中，看的时候难免会觉得无聊，不想看，但是想在这条路走的更远，博主我觉得这些东西的了解是必须的，而且理解程度应该达到和你写hello world差不多。所以加油吧！</p>
+
+<p>失败者只有一种，就是在没有成功之前放弃的人。</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

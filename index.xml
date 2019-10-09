@@ -6,10 +6,28 @@
     <description>Recent content on myblog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 20 Sep 2019 19:18:26 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 09 Oct 2019 15:16:45 +0800</lastBuildDate>
     
 	<atom:link href="https://fengfasong80.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>关于spring与mybatis的学习</title>
+      <link>https://fengfasong80.github.io/post/spring/</link>
+      <pubDate>Wed, 09 Oct 2019 15:16:45 +0800</pubDate>
+      
+      <guid>https://fengfasong80.github.io/post/spring/</guid>
+      <description>前言 因为最近在学spring与mybatis，所以更新也慢了一点，所以该篇博客也将进行spring与mybatis的学习。
+首先来了解一下spring 看一下百度的解释 ![]() 总结一下就是：解决企业开发中的复杂性。并且该框架开源，所以我们学习是不需要花费任何一点费用。
+再来看一下官网的解释 官网地址,可以看见spring的内容包括有spring cloud, spring boot, 还有一个spring mvc 接下来我要展示的是spring mvc与mybatis的联合使用，关于mybatis的话，在下面的过程中再讲解，因为博主我也在学习中，对他们的很多都不是很了解，但是，动手才是最重要的，所以，接下来我们就开始动手操作。 首先的话，在下面使用到的jar包都在maven仓库地址中获取，当然，你们也可以复制我下面的，但是因为网络问题，所以有些版本可能下载不了，可以到该网址换版本。
+来看一下项目结构 ![]() 该demo是我们老师给我们的，然后我自己进行了增加，前端使用了easyui的框架，大家可以不用去在意，主要看后端实现就好。该demo博主会放在我的github上面，感兴趣可以去克隆下来。 结构了解后，再来看一下运行的效果 ![]() 该demo主要是针对一张表的操作，博主我在后面有增加一张表，登陆的用户表不算在内，登陆在后面再进行讲解。
+接下里就对各个包进行解释，java文件存放的就是我们的java源码，resources存放的各种资源文件，包括各种xml的配置文件以及数据库的连接信息文件。 所以我们需要关注的是java下各个包存放的是什么， 我们首先关注的应该是entity这个包，根据单词意思应该就能猜出里面存放的内容，不错，就是各种实体类。 接下里关注的就是mapper，在里面定义的是各种接口，然后在对应的resources中我们需要创建对应的xml配置文件，关于mapper，现在只要理解为对创建bean对象的一个接口就好，在后面再进行深入的学习。
+接下来要关注的就是service了，在里面定义的是各种接口以及他们的实现。现在我们只需要知道它可以调用mapper接口就好。
+最后需要关注的就是controller了，在里面进行是一些事务的控制。
+开始正式的搭建该demo 第一步先看一下resources的结构，我们需要进行xml的配置。 第一个需要的文件config.properties 里面就是数据库的连接信息
+mysql.driverClassName=com.mysql.jdbc.Driver mysql.jdbcUrl=jdbc:mysql://localhost:3306/tutorial?allowMultiQueries=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;amp;useSSL=false mysql.username=root mysql.password=123  第二个我们来配置spring-mybatis.xml关于解释的话，已经写好注释了，这里的话就要感谢我的老师，感觉理解起来就是很棒。
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; xmlns:context=&amp;quot;http://www.springframework.org/schema/context&amp;quot; xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&amp;quot;&amp;gt; &amp;lt;!-- 数据库连接池配置 --&amp;gt; &amp;lt;bean id=&amp;quot;dataSource&amp;quot; class=&amp;quot;com.zaxxer.hikari.HikariDataSource&amp;quot; destroy-method=&amp;quot;close&amp;quot;&amp;gt; &amp;lt;property name=&amp;quot;driverClassName&amp;quot; value=&amp;quot;${mysql.driverClassName}&amp;quot; /&amp;gt; &amp;lt;property name=&amp;quot;jdbcUrl&amp;quot; value=&amp;quot;${mysql.jdbcUrl}&amp;quot; /&amp;gt; &amp;lt;property name=&amp;quot;username&amp;quot; value=&amp;quot;${mysql.username}&amp;quot; /&amp;gt; &amp;lt;property name=&amp;quot;password&amp;quot; value=&amp;quot;${mysql.</description>
+    </item>
     
     <item>
       <title>Jdk环境变量的配置问题</title>
