@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Spring02 // myblog</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.55.6" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://fengfasong80.github.io/css/main.min.f90f5edd436ec7b74ad05479a05705770306911f721193e7845948fb07fe1335.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spring02"/>
+<meta name="twitter:description" content="内容介绍 本篇是对应上一篇，开始具体mybatis_plus的使用，主要是完成增删改查的操作。 mybatis-plus相对于mybatis而言，有很多操作变得更加简单，也让我们从一些复用的sql操作中解放，下面的列子可以很好的诠释。
+开始代码编写 相关jar包 如果出现版本错误，可以去maven仓库进行版本更换，地址在上一遍给出。
+&lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-context&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-core&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-beans&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;!-- spring web 依赖 --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-web&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;!-- spring mvc 依赖 --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;!-- 切面 --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-aop&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;log4j&lt;/groupId&gt; &lt;artifactId&gt;log4j&lt;/artifactId&gt; &lt;version&gt;1.2.17&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;javax.servlet&lt;/groupId&gt; &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt; &lt;version&gt;4.0.1&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;fastjson&lt;/artifactId&gt; &lt;version&gt;1.2.57&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;commons-io&lt;/groupId&gt; &lt;artifactId&gt;commons-io&lt;/artifactId&gt; &lt;version&gt;2.6&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org."/>
+
+    <meta property="og:title" content="Spring02" />
+<meta property="og:description" content="内容介绍 本篇是对应上一篇，开始具体mybatis_plus的使用，主要是完成增删改查的操作。 mybatis-plus相对于mybatis而言，有很多操作变得更加简单，也让我们从一些复用的sql操作中解放，下面的列子可以很好的诠释。
+开始代码编写 相关jar包 如果出现版本错误，可以去maven仓库进行版本更换，地址在上一遍给出。
+&lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-context&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-core&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-beans&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;!-- spring web 依赖 --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-web&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;!-- spring mvc 依赖 --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;!-- 切面 --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-aop&lt;/artifactId&gt; &lt;version&gt;5.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;log4j&lt;/groupId&gt; &lt;artifactId&gt;log4j&lt;/artifactId&gt; &lt;version&gt;1.2.17&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;javax.servlet&lt;/groupId&gt; &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt; &lt;version&gt;4.0.1&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;fastjson&lt;/artifactId&gt; &lt;version&gt;1.2.57&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;commons-io&lt;/groupId&gt; &lt;artifactId&gt;commons-io&lt;/artifactId&gt; &lt;version&gt;2.6&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fengfasong80.github.io/post/spring02/" />
+<meta property="article:published_time" content="2019-10-25T21:06:34&#43;08:00"/>
+<meta property="article:modified_time" content="2019-10-25T21:06:34&#43;08:00"/>
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://fengfasong80.github.io/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <h1>myblog</h1>
+      <p>关于本博客，该博客的更新时间不确定，主要是在学习过程中的一些复习以及自己的了解。</p>
+      <div class="app-header-social">
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Spring02</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Oct 25, 2019
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          3 min read
+        </div></div>
+    </header>
+    <div class="post-content">
+      
+
+<h1 id="内容介绍">内容介绍</h1>
+
+<p>本篇是对应上一篇，开始具体mybatis_plus的使用，主要是完成增删改查的操作。
+mybatis-plus相对于mybatis而言，有很多操作变得更加简单，也让我们从一些复用的sql操作中解放，下面的列子可以很好的诠释。</p>
+
+<h2 id="开始代码编写">开始代码编写</h2>
+
+<h3 id="相关jar包">相关jar包</h3>
+
+<p>如果出现版本错误，可以去maven仓库进行版本更换，地址在上一遍给出。</p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- spring web 依赖 --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- spring mvc 依赖 --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;!-- 切面 --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;log4j&lt;/groupId&gt;
+			&lt;artifactId&gt;log4j&lt;/artifactId&gt;
+			&lt;version&gt;1.2.17&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+			&lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
+			&lt;version&gt;4.0.1&lt;/version&gt;
+			&lt;scope&gt;provided&lt;/scope&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+			&lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+			&lt;version&gt;1.2.57&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;commons-io&lt;/groupId&gt;
+			&lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+			&lt;version&gt;2.6&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+			&lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;
+			&lt;version&gt;3.9&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;commons-fileupload&lt;/groupId&gt;
+			&lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;
+			&lt;version&gt;1.3.1&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.zaxxer&lt;/groupId&gt;
+			&lt;artifactId&gt;HikariCP&lt;/artifactId&gt;
+			&lt;version&gt;3.3.0&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;mysql&lt;/groupId&gt;
+			&lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+			&lt;version&gt;5.1.41&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+			&lt;artifactId&gt;mybatis-plus&lt;/artifactId&gt;
+			&lt;version&gt;3.1.1&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+			&lt;artifactId&gt;mybatis-plus-generator&lt;/artifactId&gt;
+			&lt;version&gt;3.1.1&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+			&lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.freemarker&lt;/groupId&gt;
+			&lt;artifactId&gt;freemarker&lt;/artifactId&gt;
+			&lt;version&gt;2.3.28&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+			&lt;artifactId&gt;jstl&lt;/artifactId&gt;
+			&lt;version&gt;1.2&lt;/version&gt;
+		&lt;/dependency&gt;
+</code></pre>
+
+<h3 id="实体类">实体类</h3>
+
+<p>这是一个商品实体，测试使用，属性考虑并不完整。</p>
+
+<pre><code class="language-java">package com.fc.springmvc.modules.commerce.entity;
+
+import java.sql.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+
+public class Good {
+	// 主键
+	private String id;
+	// 商品名称
+	private String name;
+	// 价格
+	private double price;
+	// 生产日期
+	@TableField(&quot;productDate&quot;)
+	private Date productDate;
+	// 保质期，单位天
+	private Integer expiration;
+	// 厂商
+	private String production;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public Date getProductDate() {
+		return productDate;
+	}
+
+	public void setProductDate(Date productDate) {
+		this.productDate = productDate;
+	}
+
+	public Integer getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(Integer expiration) {
+		this.expiration = expiration;
+	}
+
+	public String getProduction() {
+		return production;
+	}
+
+	public void setProduction(String production) {
+		this.production = production;
+	}
+
+}
+
+</code></pre>
+
+<h3 id="mapper接口">mapper接口</h3>
+
+<pre><code class="language-java">package com.fc.springmvc.modules.commerce.mapper;
+
+
+
+import org.apache.ibatis.annotations.Param;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fc.springmvc.modules.commerce.entity.Good;
+
+public interface GoodMapper extends BaseMapper&lt;Good&gt;{
+
+	/**
+	 * 分页查看商品信息
+	 * @param page
+	 * @return
+	 */
+	IPage&lt;Good&gt; pageGood(Page&lt;?&gt; page, @Param(&quot;good&quot;)Good good);
+	
+}
+
+</code></pre>
+
+<h3 id="sql语句编写在对应的xml里面">sql语句编写在对应的xml里面</h3>
+
+<p>很简单的查询所有，不做解释。</p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.fc.springmvc.modules.commerce.mapper.GoodMapper&quot;&gt;
+
+	&lt;select id=&quot;pageGood&quot; resultType=&quot;com.fc.springmvc.modules.commerce.entity.Good&quot;&gt;
+		select * from good
+		&lt;where&gt;
+			&lt;if test=&quot;good.name != null and good.name != ''&quot;&gt; and name = #{good.name} &lt;/if&gt;
+		&lt;/where&gt;
+	&lt;/select&gt;
+
+&lt;/mapper&gt;
+</code></pre>
+
+<h3 id="service接口">service接口</h3>
+
+<p>定义商品的查询方法。</p>
+
+<pre><code class="language-java">package com.fc.springmvc.modules.commerce.service;
+
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.fc.springmvc.modules.commerce.entity.Good;
+
+public interface GoodService extends IService&lt;Good&gt; {
+
+	public IPage&lt;Good&gt; pageGood(Page&lt;Good&gt; page, Good good);
+	
+}
+
+</code></pre>
+
+<h3 id="service实现类">service实现类</h3>
+
+<p>实现商品的查询方法</p>
+
+<pre><code class="language-java">package com.fc.springmvc.modules.commerce.service.impl;
+
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fc.springmvc.modules.commerce.entity.Good;
+import com.fc.springmvc.modules.commerce.mapper.GoodMapper;
+import com.fc.springmvc.modules.commerce.service.GoodService;
+
+
+@Service
+public class GoodServiceImpl extends ServiceImpl&lt;GoodMapper, Good&gt; implements GoodService {
+
+	public IPage&lt;Good&gt; pageGood(Page&lt;Good&gt; page, Good good) {
+		return baseMapper.pageGood(page, good);
+	}
+
+}
+
+</code></pre>
+
+<h3 id="前端控制器">前端控制器</h3>
+
+<p>前端交互接口，增删改查都有实现。</p>
+
+<pre><code class="language-java">package com.fc.springmvc.modules.commerce.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fc.springmvc.modules.commerce.entity.Good;
+import com.fc.springmvc.modules.commerce.service.GoodService;
+
+@Controller
+@RequestMapping(&quot;commerce/good&quot;)
+public class GoodController {
+
+	@Autowired
+	GoodService goodService;
+	
+    //插入
+	@RequestMapping(&quot;save&quot;)
+	@ResponseBody
+	public R&lt;?&gt; save(Good good) {
+		boolean save = goodService.save(good);
+		return save ? R.ok(null) : R.failed(&quot;保存失败&quot;);
+	}
+	
+    //删除
+	@RequestMapping(&quot;removeById&quot;)
+	@ResponseBody
+	public R&lt;?&gt; removeById(Good good) {
+		boolean save = goodService.removeById(good.getId());
+		return save ? R.ok(null) : R.failed(&quot;删除失败&quot;);
+	}
+	
+    //更新
+	@RequestMapping(&quot;updateById&quot;)
+	@ResponseBody
+	public R&lt;?&gt; updateById(Good good) {
+		boolean save = goodService.updateById(good);
+		return save ? R.ok(null) : R.failed(&quot;修改失败&quot;);
+	}
+	
+    //查询，该处因为使用了easyui的前端框架，所以对返回值进行了处理
+    //easyui的分页要求传入两个值rows和total，就是每一页显示的数据和总的数据数量
+	@RequestMapping(&quot;pageGood&quot;)
+	@ResponseBody
+	public Map&lt;String, Object&gt; pageGood(Page&lt;Good&gt; page, Good good) {
+		IPage&lt;Good&gt; pageGood = goodService.pageGood(page, good);
+		Map&lt;String, Object&gt; result = new HashMap&lt;String, Object&gt;();
+		result.put(&quot;total&quot;, pageGood.getTotal());
+		result.put(&quot;rows&quot;, pageGood.getRecords());
+		return result;
+	}
+	
+}
+
+</code></pre>
+
+<h1 id="总结">总结</h1>
+
+<p>对于框架的学习，我觉得首先需要的就是把项目给跑起来，没有把项目给跑起来，就会失去学习的兴趣。
+这里给出项目下载地址，给出的项目不是该篇的样子，是有很多次更新后的测试产品，包括了权限管理的实现，相关的sql会附加在项目里面。
+<a href="https://github.com/fengfasong80/springBog">下载地址</a></p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
